@@ -1,0 +1,10 @@
+{
+  "name": "dh-player",
+  "version": "0.1.0",
+  "description": "DragonHall+ Player",
+  "author": "Gabor Garami <hron@hron.me>",
+  "license": "SEE LICENSE IN COPYRIGHT.md",
+  "dependencies": {
+    "flowplayer": "^7.2.7"
+  }
+}
