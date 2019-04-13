@@ -2,3 +2,7 @@
 /node_modules/
 /templates_c/
 /cache/
+
+
+*.tar.gz
+*.zip

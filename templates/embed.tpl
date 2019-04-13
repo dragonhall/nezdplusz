@@ -5,17 +5,22 @@
         <meta charset="utf8" />
         <meta name="description" content="Egy hely, ahol a régebbi mesék legalább olyan fontosak, mint az újak. Ahol szinkronos és feliratos anime egyenértékû, és jól megférnek egymással. Ahol csakis a minõség a fontos, és nem csak a mennyiség! Mi garanciát vállalunk az igényességre! Tarts velünk és ismertesd meg másokkal is az álmunkat! Hisz csak együtt sikerülhet! DragonHall+ | Már nem csak álom az igényesség!" />
         <meta name='keywords' content='anime, manga, rajzfilm, szinkron, DH, Dragon, Hall, DragonHall, szinkronhangok, magyarhangok, ' />
-        <link rel="stylesheet" type="text/css" href="/themes/DragonSTAR/styles.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/skin/skin.min.css" />
         <!--link rel="stylesheet" type="text/css" href="/nezdplusz/node_modules/flowplayer/dist/skin/skin.min.css" /-->
 
         <link rel="shortcut icon" type="image/gif" href="/images/favicon.gif" />
-        
+
+        <!--style>
+            .flowplayer .fp-captions p {
+                font-size: 1.8em;
+            }
+        </style-->
+
         <!-- FaceBook sh!t -->
         <meta property="og:title" content="{$video.title}" />
         <meta property="og:type"  content="video.other" />
         <meta property="og:url" content="https://dragonhall.hu/nezdplusz/player.php?did={$video.id}" />
-        <meta property="og:image" content="{$video.cover}" />
+        <meta property="og:image" content="{$video.fb_cover}" />
         <meta property="og:image:width" content="{$video.width}" />
         <meta property="og:image:height" content="{$video.height}" />
         <meta property="og:image:alt" content="{$video.title}" />
@@ -37,38 +42,18 @@
         <meta name="twitter:player" content="https://dragonhall.hu/nezdplusz/player.php?did={$video.id}&embed=1" />
         <meta name="twitter:player:width" content="{$video.width}">
         <meta name="twitter:player:height" content="{$video.width}">
-
-        <style>
-            .flowplayer .fp-captions p {
-                font-size: 1.8em;
-            }
-        </style>
     </head>
     <body>
-        <table cellpadding="0" cellspacing="0" width="99%">
-            <tbody>
-                <tr>
-                    <td class="capmain">&nbsp;&nbsp;Epizód/Film címe:&nbsp;{$video.title}</td>
-                </tr>
-                <tr>
-                    <td class="main" style="padding: 5px;">
-                        <!--div style="color: white; background: red; margin: 5px 10px; padding: 5px; font-weight: bold; font-size: 10pt; text-align: center;">Kisérleti verzió</div-->
-                        <div style="background: url(assets/nezd+player.png); max-width: 900px; height: 92px; margin-bottom: 10px;">&nbsp;</div>
-                        <div class="flowplayer fp-outlined" id="player" style="padding: 5px 0; text-align: center;">
-                                <!--
-                            <video preload="auto" data-debug="true">
-                                <source src="https://dragonhall.hu/nezdplusz/share.php?did={$video.id}" type="{$video.type}" />
-                                {if $video.subtitle}
-                                <track label="Magyar" kind="subtitles" srclang="hu" src="{$video.subtitle}" default="default" />
-                                {/if}
-                            </video>
-                                -->
-                        </div>
-
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="flowplayer fp-outlined" id="player" style="padding: 5px 0; text-align: center;">
+                <!--
+            <video preload="auto" data-debug="true">
+                <source src="https://dragonhall.hu/nezdplusz/share.php?did={$video.id}" type="{$video.type}" />
+                {if $video.subtitle}
+                <track label="Magyar" kind="subtitles" srclang="hu" src="{$video.subtitle}" default="default" />
+                {/if}
+            </video>
+                -->
+        </div>
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/flowplayer.min.js"></script-->
@@ -103,14 +88,14 @@
                                 }]
                 {/if}
 
-                //clip.poster = "{$video.cover}";
                 console.log(clip);
                 flowplayer(container, {
+                    autoplay: true,
                     debug: false,
                     share: false,
                     poster: "{$video.cover}",
                     clip: clip
-                    }).on('ready', function() {
+                }).on('ready', function() {
                     console.log(container);
                     var fsb = container.querySelector('.fp-fullscreen');
                     container.querySelector('.fp-controls').appendChild(fsb); 
