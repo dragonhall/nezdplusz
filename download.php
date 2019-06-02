@@ -9,8 +9,8 @@ define('FUSION_ROOT', dirname(APP_ROOT));
 require_once(APP_ROOT . '/vendor/autoload.php');
 require_once(FUSION_ROOT . '/config.php');
 
-if(!isset($_GET['did']) || !is_numeric($_GET['did'])) {
-  die('<b>No video specified!</b>');
+if(!isset($_GET['catid']) || !is_numeric($_GET['catid'])) {
+  die('<b>No category specified!</b>');
 }
 
 
@@ -27,6 +27,7 @@ try {
 $smarty = new Smarty;
 $smarty->template_dir = APP_ROOT . '/templates';
 $smarty->cache_dir = APP_ROOT . '/cache';
+//$smarty->debugging = true;
 
 $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
 
@@ -35,5 +36,5 @@ if(!file_exists($smarty->cache_dir)) {
   mkdir($smarty->cache_dir);
 }
 
-$player = new Player\Player($db, $smarty);
-$player->playVideo((int)$_GET['did']);
+$player = new Player\Browser($db, $smarty);
+$player->catBrowser($_GET['catid']);

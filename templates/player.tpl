@@ -36,7 +36,7 @@
         <meta name="twitter:image" content="{$video.cover}" />
         <meta name="twitter:player" content="https://dragonhall.hu/nezdplusz/player.php?did={$video.id}&embed=1" />
         <meta name="twitter:player:width" content="{$video.width}">
-        <meta name="twitter:player:height" content="{$video.width}">
+        <meta name="twitter:player:height" content="{$video.height}">
 
         <style>
             .flowplayer .fp-captions p {
@@ -117,5 +117,7 @@
                 });
             });
         </script>
+        {include file='_ga.tpl'}
+
     </body>
 </html>

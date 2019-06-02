@@ -18,31 +18,6 @@ class Player {
 
   public function playVideo($did) {
 
-    $data = $this->getVideoByID($did);
-
-    $data['type'] = 'video/' . pathinfo($data['url'], \PATHINFO_EXTENSION);
-    $data['url'] = html_entity_decode($data['url']);
-
-    $image = getimagesize(self::COVER_PATH . $data['cover']);
-
-    $data['width'] = $image[0];
-    $data['height'] = $image[1];
-
-
-    if($data['subtitle']) {
-      $vtt = preg_replace('/\.(7z|srt)$/', '.vtt', $data['subtitle']);
-
-      if(file_exists('/szeroka/dh0/load/' . $vtt)) {
-        $data['subtitle'] = 'https://dragonhall.hu' . $vtt ;
-      } else {
-        unset($data['subtitle']);
-      }
-    }
-      
-
-    $this->smarty->assign('did', $did);
-    $this->smarty->assign('error', $this->db->errorInfo());
-
     $embed = isset($_GET['embed']) && $_GET['embed'] === '1' ? 1 : 0;
 
     if(preg_match('/facebook\.com/', $_SERVER['HTTP_USER_AGENT']) ||
@@ -51,34 +26,72 @@ class Player {
        $embed = 1;
     }
 
+    $template = $embed == 1 ? 'embed.tpl' : 'player.tpl';
 
-    if($embed == 1) {
-      if(!file_exists(self::COVER_PATH . 'play/' . $data['cover']) &&
-          file_exists(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png")) {
-          
-        $image = imagecreatefromjpeg(self::COVER_PATH . $data['cover']);
-        $imagewidth = imagesx($image);
-        $imageheight = imagesy($image);
+    if(!$this->smarty->isCached($template, $did)) {
+      $data = $this->getVideoByID($did);
 
-        $watermark = imagecreatefrompng(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png");
-        $watermarkwidth = imagesx($watermark);
-        $watermarkheight = imagesy($watermark);
+      $data['type'] = 'video/' . pathinfo($data['url'], \PATHINFO_EXTENSION);
+      $data['url'] = html_entity_decode($data['url']);
 
-        imagecopyresampled($image, $watermark, 0, 0, 0, 0, $imagewidth, $imageheight, $watermarkwidth, $watermarkheight);
-        imagejpeg($image, self::COVER_PATH . 'play/' . $data['cover'], 100);
-        imagedestroy($image);
-        imagedestroy($watermark);
+      $image = getimagesize(self::COVER_PATH . $data['cover']);
 
-        $data['fb_cover'] = self::COVER_BASE . 'play/' . $data['cover'];
-      } else {
-        $data['fb_cover'] = self::COVER_BASE . 'play/' . $data['cover'];
+      $data['width'] = $image[0];
+      $data['height'] = $image[1];
+
+
+      if($data['subtitle']) {
+        $vtt = preg_replace('/\.(7z|srt)$/', '.vtt', $data['subtitle']);
+
+        if(file_exists('/szeroka/dh0/load/' . $vtt)) {
+          $data['subtitle'] = 'https://dragonhall.hu' . $vtt ;
+        } else {
+          unset($data['subtitle']);
+        }
       }
 
+
+      $this->smarty->assign('did', $did);
+      $this->smarty->assign('error', $this->db->errorInfo());
+
+      if($embed == 1) {
+        if(!file_exists(self::COVER_PATH . 'play/' . $data['cover']) &&
+          file_exists(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png")) {
+
+          $image = imagecreatefromjpeg(self::COVER_PATH . $data['cover']);
+          $imagewidth = imagesx($image);
+          $imageheight = imagesy($image);
+
+          $watermark = imagecreatefrompng(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png");
+          $watermarkwidth = imagesx($watermark);
+          $watermarkheight = imagesy($watermark);
+
+          imagecopyresampled($image, $watermark, 0, 0, 0, 0, $imagewidth, $imageheight, $watermarkwidth, $watermarkheight);
+          imagejpeg($image, self::COVER_PATH . 'play/' . $data['cover'], 100);
+          imagedestroy($image);
+          imagedestroy($watermark);
+
+        }
+
+        if(file_exists(self::COVER_PATH . 'play/' . $data['cover'])) {
+          $data['fb_cover'] = self::COVER_BASE . 'play/' . $data['cover'];
+        } else {
+          $data['fb_cover'] = self::COVER_BASE . $data['cover'];
+        }
+      }
+
+      if(preg_match('/(t\.co|twitter\.com)/', $_SERVER['HTTP_REFERER'])) {
+        $data['autoplay'] = 1;
+      } else {
+        $data['autoplay'] = 0;
+      }
+
+      $data['cover'] = self::COVER_BASE . $data['cover'];
+
+      $this->smarty->assign('video', $data);
     }
 
-    $data['cover'] = self::COVER_BASE . $data['cover'];
-    $this->smarty->assign('video', $data);
-    $this->smarty->display($embed == 1 ? 'embed.tpl' : 'player.tpl');
+    $this->smarty->display($template, $did);
 
   }
 
@@ -128,7 +141,7 @@ class Player {
             fusion_pdp_images.pic_url AS cover
             FROM fusion_pdp_downloads 
             JOIN fusion_pdp_files ON fusion_pdp_downloads.download_id = fusion_pdp_files.download_id
-            JOIN fusion_pdp_images ON fusion_pdp_downloads.download_id = fusion_pdp_images.download_id
+            LEFT JOIN fusion_pdp_images ON fusion_pdp_downloads.download_id = fusion_pdp_images.download_id
             WHERE fusion_pdp_downloads.download_id = ?";
 
 //          CONCAT('http://dragonhall.hu:81', fusion_pdp_downloads.dl_homepage) AS subtitle, 

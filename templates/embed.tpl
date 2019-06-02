@@ -41,9 +41,9 @@
         <meta name="twitter:image" content="{$video.cover}" />
         <meta name="twitter:player" content="https://dragonhall.hu/nezdplusz/player.php?did={$video.id}&embed=1" />
         <meta name="twitter:player:width" content="{$video.width}">
-        <meta name="twitter:player:height" content="{$video.width}">
+        <meta name="twitter:player:height" content="{$video.height}">
     </head>
-    <body>
+    <body style="margin: 0">
         <div class="flowplayer fp-outlined" id="player" style="padding: 5px 0; text-align: center;">
                 <!--
             <video preload="auto" data-debug="true">
@@ -90,7 +90,7 @@
 
                 console.log(clip);
                 flowplayer(container, {
-                    autoplay: true,
+                    autoplay: ({$video.autoplay} == 1),
                     debug: false,
                     share: false,
                     poster: "{$video.cover}",
@@ -102,5 +102,7 @@
                 });
             });
         </script>
+        {include file='_ga.tpl'}
+
     </body>
 </html>
