@@ -24,9 +24,9 @@ try {
 $smarty = new Smarty;
 $smarty->template_dir = APP_ROOT . '/templates';
 $smarty->cache_dir = APP_ROOT . '/cache';
-$smarty->debugging = true;
+//$smarty->debugging = true;
 
-//$smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
+$smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
 
 
 if(!file_exists($smarty->cache_dir)) {
