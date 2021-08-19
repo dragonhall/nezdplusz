@@ -206,7 +206,7 @@
             e.preventDefault();
 
             alert("Ez a videó a DragonHall+ tulajdonát képezi, engedély nélkül nem oszthatod meg vagy játszhatod le más oldalakon!\nA továbblépéshez kattints az OK gombra!");
-            //window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
+            window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
         });
     });
 </script>

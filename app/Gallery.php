@@ -91,7 +91,11 @@ class Gallery {
       header("Content-Length: {$size}");
       header('Content-Transfer-Encoding: binary');
 
-      header('Content-Disposition: attachment; filename=' . basename($path) . ';');
+      if($_GET['dl'] === 1) {
+        header('Content-Disposition: attachment; filename=' . basename($path) . ';');
+      } else {
+        header('Content-Disposition: inline');
+      }
 
       header('X-Sendfile: ' . $path);
 
