@@ -23,6 +23,8 @@ class Gallery {
 
     $currentUser = $this->userService->currentUser();
     $accessible = AccessHelper::isVIP($currentUser, true);
+    $script = basename($_SERVER['PHP_SELF']);
+    $myUrl = $this->baseUrl() . '/' . $script;
 
     if(!$accessible) {
       AccessHelper::forbidden();
@@ -42,25 +44,26 @@ class Gallery {
       $prevPage = ($page == 1) ? 1 : $page - 1;
       $nextPage = ($page >= $lastPage) ? $lastPage : $page + 1;
 
-      $pagination[] = "<a href=\"{$_SERVER['PHP_SELF']}?page=1\" title=\"Első oldal\">&laquo;</a>";
-      $pagination[] = "<a href=\"{$_SERVER['PHP_SELF']}?page={$prevPage}\" title=\"Előző oldal\">&lsaquo;</a>";
+      $pagination[] = "<a href=\"{$myUrl}?page=1\" title=\"Első oldal\">&laquo;</a>";
+      $pagination[] = "<a href=\"{$myUrl}?page={$prevPage}\" title=\"Előző oldal\">&lsaquo;</a>";
 
       for($i = 1; $i <= $lastPage; $i++) {
         if($i === $page) {
           $pagination[] = "<strong>{$i}</strong>";
         } else {
-          $pagination[] = "<a href=\"{$_SERVER['PHP_SELF']}?page={$i}\" title=\"Ugrás: {$i}. oldal\">{$i}</a>";
+          $pagination[] = "<a href=\"{$myUrl}?page={$i}\" title=\"Ugrás: {$i}. oldal\">{$i}</a>";
         }
       }
 
-      $pagination[] = "<a href=\"{$_SERVER['PHP_SELF']}?page={$nextPage}\" title=\"Következő oldal\">&rsaquo;</a>";
-      $pagination[] = "<a href=\"{$_SERVER['PHP_SELF']}?page={$lastPage}\" title=\"Utolsó oldal\">&raquo;</a>";
+      $pagination[] = "<a href=\"{$myUrl}?page={$nextPage}\" title=\"Következő oldal\">&rsaquo;</a>";
+      $pagination[] = "<a href=\"{$myUrl}?page={$lastPage}\" title=\"Utolsó oldal\">&raquo;</a>";
 
       // print_r(array(
       //   'paginator' => $pagination,
       //   'page' => $page,
       // ));
 
+      $this->smarty->assign('baseUrl', $this->baseUrl());
       $this->smarty->assign('pagination', $pagination);
       $this->smarty->assign('album', $album);
 
@@ -139,4 +142,27 @@ class Gallery {
     
     return $data;
   }
+
+  private function baseUrl() {
+    $scheme = $_SERVER['REQUEST_SCHEME'];
+    if(isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+      $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+    }
+    
+    $port = intval($_SERVER['SERVER_PORT']);
+
+    // Workaround a quirk about Nginx reverse proxy, it forwards proto but not portnumber
+    if($scheme === 'https' && $port === 80 && (isset($_SERVER['HTTP_X_FORWARDED_PROTO']))) {
+      $port = 443;
+    }
+
+    if(($scheme === 'http' && $port === 80) || ($scheme === 'https' && $port === 443)) {
+      $locationBase = $_SERVER['HTTP_HOST'];
+    } else {
+      $locationBase = $_SERVER['HTTP_HOST'] . ':' . $port;
+    }
+
+    return "{$scheme}://{$locationBase}" . dirname($_SERVER['PHP_SELF']);
+  }
+
 }

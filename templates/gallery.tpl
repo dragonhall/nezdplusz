@@ -8,9 +8,10 @@
     <meta name='keywords'
           content='anime, manga, rajzfilm, szinkron, DH, Dragon, Hall, DragonHall, szinkronhangok, magyarhangok, '/>
     <link rel="stylesheet" type="text/css" href="/themes/DragonSTAR/styles.css" media="screen"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/skin/skin.min.css"/>
-    <!--link rel="stylesheet" type="text/css" href="/nezdplusz/node_modules/flowplayer/dist/skin/skin.min.css" /-->
+    <!--link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/skin/skin.min.css"/-->
+    <!--link rel="stylesheet" type="text/css" href="{$baseUrl}/node_modules/flowplayer/dist/skin/skin.min.css" /-->
+    <link rel="stylesheet" type="text/css" href="{$baseUrl}/node_modules/jquery.facebox/jquery.facebox.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
           integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
@@ -138,6 +139,10 @@
             transform-origin: left top 0;
         }
 
+        #facebox > .popup > .content > .image > img {
+            max-width: 700px;
+        }
+
     </style>
 </head>
 <body>
@@ -181,7 +186,7 @@
             {include file='_paginator.tpl'}
             <div class="grid">
                 {foreach from=$album item=image}
-                    <a href="https://dragonhall.hu/nezdplusz/gallery.php?iid={$image.photo_id}" target="_blank"
+                    <a href="{$baseUrl}/gallery.php?iid={$image.photo_id}" target="_blank"
                        class="gridlink">
                         <figure class="episode">
                             <div class="cover">
@@ -200,13 +205,19 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/flowplayer.min.js"></script-->
+<script type="text/javascript" src="{$baseUrl}/node_modules/jquery.facebox/jquery.facebox.min.js"></script>
 <script>
     $(function () {
+        jQuery.facebox.settings.closeImage = '{$baseUrl}/node_modules/jquery.facebox/closelabel.png';
+        jQuery.facebox.settings.loadingImage =  '{$baseUrl}/node_modules/jquery.facebox/loading.gif';
         $('a.gridlink').on('click', function (e) {
             e.preventDefault();
 
             alert("Ez a videó a DragonHall+ tulajdonát képezi, engedély nélkül nem oszthatod meg vagy játszhatod le más oldalakon!\nA továbblépéshez kattints az OK gombra!");
-            window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
+            //window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
+            jQuery.facebox(
+                { image: this.href }
+            );
         });
     });
 </script>
