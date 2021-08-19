@@ -11,11 +11,6 @@ define('FUSION_ROOT', dirname(APP_ROOT));
 require_once(APP_ROOT . '/vendor/autoload.php');
 require_once(FUSION_ROOT . '/config.php');
 
-if(!isset($_GET['did']) || !is_numeric($_GET['did'])) {
-  die('<b>No video specified!</b>');
-}
-
-
 $dsn = "mysql:host={$db_host};dbname={$db_name};charset=utf8";
 
 $db = null;
@@ -40,5 +35,11 @@ if(!file_exists($smarty->cache_dir)) {
 
 $userService = new UserService($db);
 
-$player = new Player\Player($db, $smarty, $userService);
-$player->playVideo((int)$_GET['did']);
+$gallery = new Player\Gallery($db, $smarty, $userService);
+if(isset($_GET['iid'])) {
+  $iid = filter_input(INPUT_GET, 'iid', FILTER_VALIDATE_INT);
+  $gallery->shareImage($iid);
+} else {
+  $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+  $gallery->albumBrowser((int)$page);
+}

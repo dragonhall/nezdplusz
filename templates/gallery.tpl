@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu" xml:lang="hu">
 <head>
-    <title>{$category.title} &mdash; NÉZD+ Player</title>
+        <title>DH+ VIP Galéria</title>
     <meta charset="utf8"/>
     <meta name="description"
           content="Egy hely, ahol a régebbi mesék legalább olyan fontosak, mint az újak. Ahol szinkronos és feliratos anime egyenértékû, és jól megférnek egymással. Ahol csakis a minõség a fontos, és nem csak a mennyiség! Mi garanciát vállalunk az igényességre! Tarts velünk és ismertesd meg másokkal is az álmunkat! Hisz csak együtt sikerülhet! DragonHall+ | Már nem csak álom az igényesség!"/>
@@ -16,34 +16,8 @@
 
     <link rel="shortcut icon" type="image/gif" href="/images/favicon.gif"/>
 
-    <!-- FaceBook sh!t -->
-    <meta property="og:title" content="{$category.title}"/>
-    <meta property="og:type" content="article"/>
-    <meta property="og:url" content="https://dragonhall.hu/nezdplusz/download.php?catid={$category.cat_id}"/>
-    <meta property="og:image:url" content="{$category.cover}"/>
-    <meta property="og:image:secure_url" content="{$category.cover}"/>
-    <meta property="og:image:type" content="{$category.cover_image_type}"/>
-    <meta property="og:image:width" content="{$category.cover_width}"/>
-    <meta property="og:image:height" content="{$category.cover_height}"/>
-    <meta property="og:description"
-          content="{$category.title} - Csak a DragonHall+ oldalán! Készítette: {$category.copy}"/>
-    <meta property="article:publisher" content="https://www.facebook.com/dragonhall.hu/"/>
-    <meta property="article:author" content="{$category.copy}"/>
-
-
-    <!-- Twitter sh!t -->
-    <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:site" content="@dragonhallplus"/>
-    <meta name="twitter:url" content="https://dragonhall.hu/nezdplusz/download.php?catid={$category.cat_id}"/>
-    <meta name="twitter:title" content="{$category.title}"/>
-    <meta name="twitter:description"
-          content="{$category.title} - Csak a DragonHall+ oldalán! Készítette: {$category.copy}"/>
-    <meta name="twitter:image" content="{$category.cover}"/>
 
     <style>
-        .flowplayer .fp-captions p {
-            font-size: 1.8em;
-        }
 
         body > table {
             width: 960px;
@@ -51,7 +25,7 @@
         }
 
         .header {
-            background: url(assets/nezd+player.png);
+            background: url(assets/vip_galeriak.png);
             height: 92px;
             margin: 0 auto 10px auto;
         }
@@ -63,17 +37,6 @@
             text-align: center;
         }
 
-        .play-small {
-            opacity: 0;
-
-            transition: .5s ease;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            text-align: center;
-        }
 
         .gridlink {
             display: block;
@@ -83,26 +46,25 @@
             color: lightblue;
         }
 
-        .gridlink:hover .play-small {
-            opacity: 1;
-        }
-
         figure.episode {
             display: block;
+            height: 430px;
             margin: 5px 6px;
             border: 1px solid #000;
             border-radius: 5px;
             position: relative;
         }
 
-        figure.episode > img {
+        /*figure.episode > img {
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
-        }
+            position: absolute;
+        }*/
 
         .cover {
             position: relative;
             display: block;
+            vertical-align: middle;
         }
 
         figcaption {
@@ -142,6 +104,27 @@
             padding: 4px;
         }
 
+
+        .pagination {
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .pagination ul,
+        .pagination ul li {
+            display: inline-block;
+            padding-left: 10px;
+        }
+
+        .pagination ul li a,
+        .pagination ul li strong {
+            color: #2e526e;
+        }
+
+        .pagination ul li a:hover,
+        .pagination ul li a:active {
+            color: #598fb9;
+        }
+
         .rotated-left-90 {
             -webkit-transform: rotate(-90deg);
             -moz-transform: rotate(-90deg);
@@ -155,65 +138,10 @@
             transform-origin: left top 0;
         }
 
-        .new-ribbon {
-            width: 25px;
-            height: 25px;
-            position: absolute;
-            bottom: -10px;
-            right: -10px;
-            overflow: hidden;
-        }
-        .new-ribbon::before,
-        .new-ribbon::after {
-            border: 5px solid #2980b9; /* width of curl */
-            border-bottom-color: transparent;
-            border-right-color: transparent;
-            position: absolute;
-            display: block;
-            content: '';
-            /** z-index: -1; */
-        }
-        .new-ribbon::before {
-            bottom: 0;
-            left: 0;
-        }
-
-        .new-ribbon::after {
-            top: -5px;
-            right: 0;
-            z-index: 0;
-        }
-        .new-ribbon > span {
-          width: 35px;
-          height: 8px;
-          background-color: #3498db;
-          box-shadow: 0 5px 10px rgba(0,0,0,.1);
-          color: #fff;
-          font-weight: bold;
-          font-size: 6pt;
-          padding-top: 2px;
-          line-height: 1;
-          font-family: sans-serif;
-
-          text-shadow: 0 1px 1px rgba(0,0,0,.2);
-          text-transform: uppercase;
-          text-align: center;
-
-          transform: rotate(-45deg);
-
-          position: absolute;
-          left: -5px;
-          bottom: 6px;
-        }
     </style>
 </head>
 <body>
 <nav class="floating-sidebar">
-    {if !$vip}
-    <a href="http://dragonhall.hu/infusions/pro_download_panel/download.php?catid={($category.top_cat == 0) ? $category.cat_id : $category.top_cat}"
-       target="_blank" class="d-block rotated-left-90"
-       style="font-size: 1.5em; font-weight: bold; padding: 6px; background: #2E5570; color: white">Még több ilyet!</a>
-    {/if}
     <span class="d-block icon-menu" style="padding-top: 6px;">
                 <a class="dh-icon" href="http://dragonhall.hu" target="_blank" title="DragonHall+ főoldal">
                     <img src="/themes/DragonSTAR/images/arrow_off.png" style="width: 24px; height: 24px;"/>
@@ -233,16 +161,12 @@
 <table cellpadding="0" cellspacing="0" width="99%">
     <tbody>
     <tr>
-        <td class="capmain">{$breadcrumb}</td>
+        <td class="capmain">DragonHall+ VIP képgaléria</td>
     </tr>
     <tr>
         <td class="main" style="padding: 5px;">
-            <!--div style="color: white; background: red; margin: 5px 10px; padding: 5px; font-weight: bold; font-size: 10pt; text-align: center;">Kisérleti verzió</div-->
-            <div class="header"
-            {if $vip_category}
-                style="background-image: url(assets/vip_videotar.png);"
-            {/if}
-            >
+            <div style="color: white; background: red; margin: 5px 10px; padding: 5px; font-weight: bold; font-size: 10pt; text-align: center;">Kisérleti verzió</div>
+            <div class="header">
                 <!-- Google Ads -->
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <!-- Dragonhall2 -->
@@ -254,23 +178,21 @@
                 </script>
             </div>
 
+            {include file='_paginator.tpl'}
             <div class="grid">
-                {foreach from=$downloads item=download}
-                    <a href="https://dragonhall.hu/nezdplusz/player.php?did={$download.id}" target="_blank"
+                {foreach from=$album item=image}
+                    <a href="https://dragonhall.hu/nezdplusz/gallery.php?iid={$image.photo_id}" target="_blank"
                        class="gridlink">
                         <figure class="episode">
                             <div class="cover">
-                                <img src="{$download.cover}" alt="{$download.title}" style="width: 100%;"/>
-                                <img src="assets/play-small.png" class="play-small"/>
+                                <img src="{$image.photo_thumb2}" alt="{$image.title}" style="width: 100%;"/>
                             </div>
-                            <figcaption>{$download.title}</figcaption>
-                            {if $download.is_new}
-                                <div class="new-ribbon"><span class="text">új</span></div>
-                            {/if}
+                            <figcaption>{$image.title}</figcaption>
                         </figure>
                     </a>
                 {/foreach}
             </div>
+            {include file='_paginator.tpl'}
         </td>
     </tr>
     </tbody>
@@ -284,7 +206,7 @@
             e.preventDefault();
 
             alert("Ez a videó a DragonHall+ tulajdonát képezi, engedély nélkül nem oszthatod meg vagy játszhatod le más oldalakon!\nA továbblépéshez kattints az OK gombra!");
-            window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
+            //window.open(this.href, "player_win", "height=625,width=800,menubar=no,resizable=no,scrollbars=no,status=no,titlebar=no,toolbar=no");
         });
     });
 </script>

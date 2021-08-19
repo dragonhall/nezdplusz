@@ -5,6 +5,7 @@
   "author": "Gabor Garami <hron@hron.me>",
   "license": "SEE LICENSE IN COPYRIGHT.md",
   "dependencies": {
-    "flowplayer": "^7.2.7"
+    "flowplayer": "^7.2.7",
+    "jquery.facebox": "^1.4.1"
   }
 }

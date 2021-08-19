@@ -15,7 +15,7 @@
         <meta property="og:title" content="{$video.title}" />
         <meta property="og:type"  content="video.other" />
         <meta property="og:url" content="https://dragonhall.hu/nezdplusz/player.php?did={$video.id}" />
-        <meta property="og:image" content="{$video.cover}" />
+        <meta property="og:image" content="{$video.fb_cover}" />
         <meta property="og:image:width" content="{$video.width}" />
         <meta property="og:image:height" content="{$video.height}" />
         <meta property="og:image:alt" content="{$video.title}" />
@@ -107,7 +107,9 @@
                 console.log(clip);
                 flowplayer(container, {
                     debug: false,
-                    share: false,
+                    share: true,
+                    embed: false,
+                    facebook: true,
                     poster: "{$video.cover}",
                     clip: clip
                     }).on('ready', function() {

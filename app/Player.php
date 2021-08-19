@@ -5,15 +5,18 @@ namespace Player;
 class Player {
   private $db;
   private $smarty;
+  private $userService;
 
   const DOWNLOAD_BASE = 'http://dragonhall.hu:81/';
+  const SECURE_BASE = 'https://dragonhall.hu:82/';
   const DOWNLOAD_PATH = '/szeroka/dh0/load/';
   const COVER_BASE = 'https://dragonhall.hu/index_elemei/epizod_kepek/';
   const COVER_PATH = '/szeroka/dh0/www/index_elemei/epizod_kepek/';
   
-  public function __construct($db, $smarty) {
+  public function __construct($db, $smarty, $userService) {
     $this->db = $db;
     $this->smarty = $smarty;
+    $this->userService = $userService;
   }
 
   public function playVideo($did) {
@@ -26,7 +29,24 @@ class Player {
        $embed = 1;
     }
 
-    $template = $embed == 1 ? 'embed.tpl' : 'player.tpl';
+    $category = $this->getCategory($did);
+    // VIP categories cannot embedded
+    if(in_array($category, AccessHelper::VIP_CATEGORIES)) {
+      if($embed) {
+        AccessHelper::forbidden();
+        return;
+      }
+
+      $currentUser = $this->userService->currentUser();
+      
+      if(!AccessHelper::checkAccess($category, $currentUser)) {
+        AccessHelper::forbidden();
+        return;
+      }
+    }
+    
+    //$template = $embed == 1 ? 'embed.tpl' : 'player.tpl';
+    $template = 'player.tpl';
 
     if(!$this->smarty->isCached($template, $did)) {
       $data = $this->getVideoByID($did);
@@ -54,30 +74,28 @@ class Player {
       $this->smarty->assign('did', $did);
       $this->smarty->assign('error', $this->db->errorInfo());
 
-      if($embed == 1) {
-        if(!file_exists(self::COVER_PATH . 'play/' . $data['cover']) &&
-          file_exists(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png")) {
+      if(!file_exists(self::COVER_PATH . 'play/' . $data['cover']) &&
+        file_exists(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png")) {
 
-          $image = imagecreatefromjpeg(self::COVER_PATH . $data['cover']);
-          $imagewidth = imagesx($image);
-          $imageheight = imagesy($image);
+        $image = imagecreatefromjpeg(self::COVER_PATH . $data['cover']);
+        $imagewidth = imagesx($image);
+        $imageheight = imagesy($image);
 
-          $watermark = imagecreatefrompng(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png");
-          $watermarkwidth = imagesx($watermark);
-          $watermarkheight = imagesy($watermark);
+        $watermark = imagecreatefrompng(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png");
+        $watermarkwidth = imagesx($watermark);
+        $watermarkheight = imagesy($watermark);
 
-          imagecopyresampled($image, $watermark, 0, 0, 0, 0, $imagewidth, $imageheight, $watermarkwidth, $watermarkheight);
-          imagejpeg($image, self::COVER_PATH . 'play/' . $data['cover'], 100);
-          imagedestroy($image);
-          imagedestroy($watermark);
+        imagecopyresampled($image, $watermark, 0, 0, 0, 0, $imagewidth, $imageheight, $watermarkwidth, $watermarkheight);
+        imagejpeg($image, self::COVER_PATH . 'play/' . $data['cover'], 100);
+        imagedestroy($image);
+        imagedestroy($watermark);
 
-        }
+      }
 
-        if(file_exists(self::COVER_PATH . 'play/' . $data['cover'])) {
-          $data['fb_cover'] = self::COVER_BASE . 'play/' . $data['cover'];
-        } else {
-          $data['fb_cover'] = self::COVER_BASE . $data['cover'];
-        }
+      if(file_exists(self::COVER_PATH . 'play/' . $data['cover'])) {
+        $data['fb_cover'] = self::COVER_BASE . 'play/' . $data['cover'];
+      } else {
+        $data['fb_cover'] = self::COVER_BASE . $data['cover'];
       }
 
       if(preg_match('/(t\.co|twitter\.com)/', $_SERVER['HTTP_REFERER'])) {
@@ -100,6 +118,7 @@ class Player {
 
     $url = html_entity_decode($data['url']);
     $path = str_replace(self::DOWNLOAD_BASE, self::DOWNLOAD_PATH, $url);
+    $secure_url = str_replace(self::DOWNLOAD_BASE, self::SECURE_BASE, $url);
 
     $type = 'video/' . pathinfo($path, \PATHINFO_EXTENSION);
     $size = filesize($path);
@@ -130,7 +149,7 @@ class Player {
     //  #}
 
     //}
-    header('Location: ' . $url, true, 302);
+    header('Location: ' . $secure_url, true, 302);
   }
 
 
@@ -158,6 +177,17 @@ class Player {
     $data = $stmt->fetch(\PDO::FETCH_ASSOC);
 
     return $data;
+  }
+
+  private function getCategory($id) {
+    $sql = "SELECT cat_id FROM fusion_pdp_downloads WHERE download_id = ? LIMIT 1";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(array($id));
+
+    $catid = $stmt->fetchColumn(0);
+
+    return $catid;
   }
 
   private function upCounter($id) {

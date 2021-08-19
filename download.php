@@ -1,5 +1,7 @@
 <?php
 
+use \Player\UserService;
+
 ini_set('display_errors', true);
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
@@ -36,5 +38,7 @@ if(!file_exists($smarty->cache_dir)) {
   mkdir($smarty->cache_dir);
 }
 
-$player = new Player\Browser($db, $smarty);
+$userService = new UserService($db);
+
+$player = new Player\Browser($db, $smarty, $userService);
 $player->catBrowser($_GET['catid']);
