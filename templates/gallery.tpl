@@ -140,7 +140,7 @@
         }
 
         #facebox > .popup > .content > .image > img {
-            max-width: 700px;
+            max-width: 1000px;
         }
 
     </style>
