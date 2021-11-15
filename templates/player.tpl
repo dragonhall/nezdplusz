@@ -53,7 +53,8 @@
                 <tr>
                     <td class="main" style="padding: 5px;">
                         <!--div style="color: white; background: red; margin: 5px 10px; padding: 5px; font-weight: bold; font-size: 10pt; text-align: center;">Kisérleti verzió</div-->
-                        <div style="background: url(assets/nezd+player.png); max-width: 900px; height: 92px; margin-bottom: 10px;">&nbsp;</div>
+                        <!--div style="background: url(assets/nezd+player.png); max-width: 900px; height: 92px; margin-bottom: 10px;">&nbsp;</div-->
+                        <div style="background: url(assets/{$headerimg}); max-width: 900px; height: 92px; margin-bottom: 10px;">&nbsp;</div>
                         <div class="flowplayer fp-outlined" id="player" style="padding: 5px 0; text-align: center;">
                                 <!--
                             <video preload="auto" data-debug="true">

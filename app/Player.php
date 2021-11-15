@@ -44,7 +44,7 @@ class Player {
         return;
       }
     }
-    
+
     //$template = $embed == 1 ? 'embed.tpl' : 'player.tpl';
     $template = 'player.tpl';
 
@@ -73,6 +73,12 @@ class Player {
 
       $this->smarty->assign('did', $did);
       $this->smarty->assign('error', $this->db->errorInfo());
+      //      $this->smarty->assign('category', $category);
+      if(in_array($category, AccessHelper::VIP_CATEGORIES)) {
+        $this->smarty->assign('headerimg', 'vip_videotar.png');
+      } else {
+        $this->smarty->assign('headerimg', 'nezd+player.png');
+      }
 
       if(!file_exists(self::COVER_PATH . 'play/' . $data['cover']) &&
         file_exists(self::COVER_PATH . "play/__Online_player_{$data['width']}x{$data['height']}.png")) {

@@ -6,6 +6,11 @@
   "license": "SEE LICENSE IN COPYRIGHT.md",
   "dependencies": {
     "flowplayer": "^7.2.7",
+    "flowplayer-hlsjs": "flowplayer/flowplayer-hlsjs",
     "jquery.facebox": "^1.4.1"
+  },
+  "devDependencies": {
+    "babel-minify": "^0.5.1",
+    "browserify": "^17.0.0"
   }
 }
