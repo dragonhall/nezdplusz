@@ -87,7 +87,8 @@
             opacity: 1;
         }
 
-        figure.episode {
+        figure.episode,
+        figure.advert {
             display: block;
             margin: 5px 6px;
             border: 1px solid #000;
@@ -205,6 +206,32 @@
           left: -5px;
           bottom: 6px;
         }
+
+        .advert > .cover,
+        .advert > .cover-16 {
+            overflow: hidden;
+        }
+        .advert > .cover > img,
+        .advert > .cover-16 > img {
+            width: 120%;
+            margin-left: -10%;
+        }
+
+        .advert > .cover {
+            height: 20.3em;
+        }
+
+        .advert > .cover > img {
+            margin-top: -5%;
+        }
+
+        .advert > .cover-16 {
+            height: 15.3em;
+        }
+
+        .advert > .cover-16 > img {
+            margin-top: -10%;
+        }
     </style>
 </head>
 <body>
@@ -255,6 +282,14 @@
             </div>
 
             <div class="grid">
+                <a href="{$advert[1]}" target="_blank" class="gridlink advert">
+                    <figure class="advert">
+                        <div class="{$adclass}">
+                            <img src="{$advert[0]}" alt="" />
+                        </div>
+                        <figcaption>Reklám</figcaption>
+                    </figure>
+                </a>
                 {foreach from=$downloads item=download}
                     <a href="https://dragonhall.hu/nezdplusz/player.php?did={$download.id}" target="_blank"
                        class="gridlink">

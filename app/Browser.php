@@ -47,12 +47,7 @@ class Browser {
 
       // Generate ad positions
       $dl_size = count($downloads);
-      $ad_count = $dl_size % 3;
 
-      //if($ad_count > 0) {
-      //  for($i 
-      //}
-      
 
       //$category['cover'] = $this->getCategoryImage($topCat['cat_id']); 
       //$category['cover'] = str_replace('index_elemei', 'index_elemei_fb', $category['cover']);
@@ -76,6 +71,28 @@ class Browser {
       $category['copy'] = $this->getFirstCopyright($catid);
       $category['title'] = $this->calcFancyTitle($category);
 
+      //if($dl_size > 3) {
+        $ads = AdvertisementRegistry::getAds();
+      //} else {
+      //  $ads = [];
+      //}
+
+      //$ratio = $category['cover_width'] / $category['cover_height'];
+      $firstImage = $downloads[0]['cover_path'];
+      $s = getimagesize($firstImage);
+      $ratio = $s[0] / $s[1];
+
+      if($ratio < 1.5) {
+        // Treat it as 4:3
+        $ad_cover_class = 'cover';
+      } else {
+        $ad_cover_class = 'cover-16';
+      }
+
+
+      $this->smarty->assign('advert', $ads[0]);
+      $this->smarty->assign('adclass', $ad_cover_class);
+      $this->smarty->assign('adratio', $ratio);
       $this->smarty->assign('breadcrumb', $breadcrumb);
       $this->smarty->assign('category', $category);
       $this->smarty->assign('topcat', $topCat);
@@ -188,6 +205,7 @@ class Browser {
     if($count > 0) {
       $sql = "SELECT fusion_pdp_downloads.download_id AS id, fusion_pdp_downloads.dl_name AS title,
               CONCAT('" . self::COVER_BASE . "', fusion_pdp_images.pic_url) AS cover,
+              CONCAT('" . self::COVER_PATH . "', fusion_pdp_images.pic_url) AS cover_path,
               (dl_mtime > {$last_new}) AS is_new
               FROM fusion_pdp_downloads
               LEFT JOIN fusion_pdp_images ON fusion_pdp_downloads.download_id = fusion_pdp_images.download_id
