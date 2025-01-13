@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ME="$(readlink -f "${BASH_SOURCE[0]}")"
+MYDIR="$(dirname "${ME}")"
+
+exec php -d allow_url_fopen=1 -d memory_limit=-1 "${MYDIR}/composer.phar" "$@"

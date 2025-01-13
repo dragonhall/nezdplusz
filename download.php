@@ -8,6 +8,8 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 define('APP_ROOT', __DIR__);
 define('FUSION_ROOT', dirname(APP_ROOT));
 
+require_once(APP_ROOT . '/recaptcha_check.php');
+
 require_once(APP_ROOT . '/vendor/autoload.php');
 require_once(FUSION_ROOT . '/config.php');
 
@@ -32,6 +34,7 @@ $smarty->cache_dir = APP_ROOT . '/cache';
 //$smarty->debugging = true;
 
 $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
+$smarty->setCacheLifetime(15 * 60);
 
 
 if(!file_exists($smarty->cache_dir)) {

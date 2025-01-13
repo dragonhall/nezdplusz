@@ -5,6 +5,8 @@ MYDIR="$(dirname "${ME}")"
 
 APP_ROOT="$(dirname "${MYDIR}")"
 
+export PATH="${MYDIR}:${PATH}"
+
 cd "${APP_ROOT}" || exit 0
 
 if [ composer.json -nt composer.lock ]; then

@@ -235,6 +235,7 @@
     </style>
 </head>
 <body>
+        <script type="text/javascript" src="assets/figyucsak.js"></script>
 <nav class="floating-sidebar">
     {if !$vip}
     <a href="http://dragonhall.hu/infusions/pro_download_panel/download.php?catid={($category.top_cat == 0) ? $category.cat_id : $category.top_cat}"

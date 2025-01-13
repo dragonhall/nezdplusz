@@ -7,5 +7,6 @@ APP_ROOT="$(dirname "${MYDIR}")"
 
 cd "${APP_ROOT}" || exit 0
 
-echo " >> Clearing cache"
-find cache templates_c -type f -delete
+echo " >> Fixing permissions"
+chown -R dragonhall:ftpgroup "${APP_ROOT}"
+chown -R www-data:www-data cache templates_c
