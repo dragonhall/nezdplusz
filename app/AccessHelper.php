@@ -6,10 +6,11 @@ class AccessHelper {
 
   const VIP_CATEGORIES = [1512];
   //const VIP_GROUPS = [115,116,117];
-  const VIP_GROUPS = [7,15];
+  const VIP_GROUPS = [7,15,16];
   const VIP_IMG_GROUPS = [7,15,16,17];
   //const VIP_GROUPS = [7,15,16,17];
-  const FORBIDDEN_PAGE = '/szeroka/dh0/www/inc/error/cod/403v2.php';
+  const FUSION_PATH = '/srv/www/www.dragonhall.hu/current';
+  const FORBIDDEN_PAGE = FUSION_PATH . '/inc/error/cod/403v2.php';
 
 
   public static function checkAccess($catid, $user) {

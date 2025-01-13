@@ -7,8 +7,9 @@ class Player {
   private $smarty;
   private $userService;
 
-  const DOWNLOAD_BASE = 'http://dragonhall.hu:81/';
-  const SECURE_BASE = 'https://dragonhall.hu:82/';
+  // const DOWNLOAD_BASE = 'http://dragonhall.hu:81/';
+  const DOWNLOAD_BASE = 'https://download.dragonhall.hu/';
+  const SECURE_BASE = 'https://download.dragonhall.hu/';
   const DOWNLOAD_PATH = '/szeroka/dh0/load/';
   const COVER_BASE = 'https://dragonhall.hu/index_elemei/epizod_kepek/';
   const COVER_PATH = '/szeroka/dh0/www/index_elemei/epizod_kepek/';
