@@ -22,12 +22,18 @@ class AccessHelper
         if (in_array($catid, self::VIP_CATEGORIES)) {
             return static::isVIP($user);
         } else {
-            $member = static::isMember($user);
+
+            
             if ($categoryService === null) {
                 $categoryService = $GLOBALS['categoryService'];
             }
             $category = $categoryService->findBy(['cat_id' => $catid]);
 
+            if($category['cat_access'] == self::iGUEST) {
+                return true;
+            }
+            
+            $member = static::isMember($user);
             return $member && $category && $category['cat_access'] == self::iMEMBER;
         }
     }
