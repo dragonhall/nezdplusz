@@ -3,6 +3,12 @@
     "description": "DragonHall+ Video Player",
     "type": "project",
     "require": {
+        "php": "^5.6",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-mbstring": "*",
+        "ext-mysql": "*",
         "smarty/smarty": "^3.1@dev"
     },
     "authors": [
@@ -17,5 +23,8 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.11"
+    }
 }

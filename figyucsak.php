@@ -8,70 +8,71 @@ $captcha_api = 'https://www.google.com/recaptcha/api/siteverify';
 
 require __DIR__ . '/vendor/autoload.php';
 
-function get_remote_ip() {
-  if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
-    return  $_SERVER['HTTP_X_FORWARDED_FOR'];
-  } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
-    return $_SERVER['REMOTE_ADDR'];
-  } else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
-    return $_SERVER['HTTP_CLIENT_IP'];
-  }
+function get_remote_ip()
+{
+    if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+        return $_SERVER['REMOTE_ADDR'];
+    } elseif (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    }
 
-  return '';
+    return '';
 }
 
-function validate_recaptcha($data) {
-  try {
+function validate_recaptcha($data)
+{
+    try {
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-    $url = 'https://www.google.com/recaptcha/api/siteverify';
-    
-    $options = [
-      'http' => [
+        $options = [
+        'http' => [
         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
         'method'  => 'POST',
-        'content' => http_build_query($data) 
-      ]
-    ];
+        'content' => http_build_query($data)
+        ]
+        ];
 
-    $context  = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
 
-    //print "API Response:" . PHP_EOL;
-    //print_r($result);
+      //print "API Response:" . PHP_EOL;
+      //print_r($result);
 
-    return json_decode($result);
-  }
-  catch (Exception $e) {
-    return null;
-  }
+        return json_decode($result);
+    } catch (Exception $e) {
+        return null;
+    }
 }
 
-function rebuild_url($u) {
-  return $u['scheme'] . '://' . $u['host'] . $u['path'] . '?' . $u['query'];
+function rebuild_url($u)
+{
+    return $u['scheme'] . '://' . $u['host'] . $u['path'] . '?' . $u['query'];
 }
 
-if(isset($_POST['g-recaptcha-response'])) {
-  $api_request = [
+if (isset($_POST['g-recaptcha-response'])) {
+    $api_request = [
     'secret' => $captcha_secret,
     'response' => $_POST['g-recaptcha-response'],
     'remoteip' => get_remote_ip(),
-  ];
+    ];
 
   // print "API Request:" . PHP_EOL;
   // print_r($api_request);
 
-  $api_result = validate_recaptcha($api_request); 
+    $api_result = validate_recaptcha($api_request);
 
-  if($api_result->success && isset($_POST['jumpid'])) {
-    $url = parse_url(base64_decode($_POST['jumpid'])); // we just hide the next url from the search engines, not from users
-    $url['query'] .= '&rcts=' . urlencode(base64_encode($api_result->challenge_ts)); // The next hop may or may not validate this timestamp
-    header('Location: ' . rebuild_url($url));
-  } else {
-    //print ($api_result->success ? "Captcha OK" : "Captcha not OK");
-    print_r($api_result);
-    print "Captcha success (ezt nem kéne látnod, irj nekünk az info@dragonhall.hu -ra, és jelöld meg, melyik filmet próbáltad megnézni/letölteni. Köszi!)";
-  }
-  exit;
+    if ($api_result->success && isset($_POST['jumpid'])) {
+        $url = parse_url(base64_decode($_POST['jumpid'])); // we just hide the next url from the search engines, not from users
+        $url['query'] .= '&rcts=' . urlencode(base64_encode($api_result->challenge_ts)); // The next hop may or may not validate this timestamp
+        header('Location: ' . rebuild_url($url));
+    } else {
+      //print ($api_result->success ? "Captcha OK" : "Captcha not OK");
+        print_r($api_result);
+        print "Captcha success (ezt nem kéne látnod, irj nekünk az info@dragonhall.hu -ra, és jelöld meg, melyik filmet próbáltad megnézni/letölteni. Köszi!)";
+    }
+    exit;
 }
 ?>
 <html>

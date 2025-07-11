@@ -1,6 +1,6 @@
 <?php
 
-use \Player\UserService;
+use Player\UserService;
 
 ini_set('display_errors', true);
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -17,13 +17,13 @@ $dsn = "mysql:host={$db_host};dbname={$db_name};charset=utf8";
 
 $db = null;
 try {
-  $db = new PDO($dsn, $db_user, $db_pass);
-  $db->exec("SET NAMES utf8");
+    $db = new PDO($dsn, $db_user, $db_pass);
+    $db->exec("SET NAMES utf8");
 } catch (PDOException $ex) {
-  die("<b>Connection error:</b> {$ex->getMessage()}");
+    die("<b>Connection error:</b> {$ex->getMessage()}");
 }
 
-$smarty = new Smarty;
+$smarty = new Smarty();
 $smarty->template_dir = APP_ROOT . '/templates';
 $smarty->cache_dir = APP_ROOT . '/cache';
 //$smarty->debugging = true;
@@ -31,8 +31,8 @@ $smarty->cache_dir = APP_ROOT . '/cache';
 $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
 
 
-if(!file_exists($smarty->cache_dir)) {
-  mkdir($smarty->cache_dir);
+if (!file_exists($smarty->cache_dir)) {
+    mkdir($smarty->cache_dir);
 }
 
 $userService = new UserService($db);
