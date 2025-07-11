@@ -59,6 +59,10 @@ class UserService {
                 $user['user_groups'] = $sgroups;
             }
         }
+
+        // if ($user && isset($user['user_level'])) {
+        //     $user['user_groups'][] = GroupService::BUILTIN_GROUPS[$user['user_level']];
+        // }
         return $user;
     }
 }
