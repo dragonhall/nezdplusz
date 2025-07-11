@@ -23,7 +23,7 @@ class AccessHelper {
             if ($categoryService === null) {
                 $categoryService = $GLOBALS['categoryService'];
             }
-            
+
             $category = $categoryService->findBy(['cat_id' => $catid]);
 
             // If the category is set to guest access, allow access to anonymous users too
@@ -38,7 +38,7 @@ class AccessHelper {
             if ($member) {
                 if (
                     in_array($cat_access, [self::iMEMBER, self::iADMIN, self::iSUPERADMIN]) &&
-                    $user['user_level'] == $cat_access
+                    $user['user_level'] >= $cat_access
                 ) {
                     return true;
                 }
