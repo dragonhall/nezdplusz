@@ -48,5 +48,5 @@ $settings = new Settings($db);
 $groupService = new GroupService($db, $settings);
 $categoryService = new CategoryService($db);
 
-$player = new Player\Player($db, $smarty, $userService);
+$player = new Player\Player($db, $smarty, $userService, $groupService, $categoryService, $settings);
 $player->playVideo((int) $_GET['did']);
