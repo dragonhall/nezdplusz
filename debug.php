@@ -1,5 +1,6 @@
 <?php
 
+use Player\AccessHelper;
 use Player\GroupService;
 use Player\UserService;
 use Player\CategoryService;
@@ -16,6 +17,10 @@ define('FUSION_ROOT', dirname(APP_ROOT));
 require_once(APP_ROOT . '/vendor/autoload.php');
 require_once(FUSION_ROOT . '/config.php');
 
+if(!isset($_COOKIE['fusion_user']) || !is_numeric($_COOKIE['fusion_user'])) {
+    AccessHelper::forbidden();
+    exit;
+}
 
 $dsn = "mysql:host={$db_host};dbname={$db_name};charset=utf8";
 
