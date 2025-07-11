@@ -10,7 +10,7 @@ if(!isset($jumpback) || empty($jumpback)) {
 // If the challenge response (the recaptcha date) is not set, JS will handle the redirect to keep referer
 if(isset($_GET['rcts'])) {
   // Is this a valid datetime?
-  $challenge = base64_decode($_GET['rcts']);
+  $challenge = base64_decode(urldecode($_GET['rcts']));
   $challenge_check = date_parse($challenge);
   if($challenge_check['error_count'] > 0) {
     header('Location: ' . $jumpback);

@@ -20,7 +20,7 @@
         </style>
     </head>
     <body>
-        <script type="text/javascript" src="assets/figyucsak.js"></script>
+        <!--script type="text/javascript" src="assets/figyucsak.js"></script-->
         <table cellpadding="0" cellspacing="0" width="99%">
             <tbody>
                 <tr>

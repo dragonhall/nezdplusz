@@ -64,9 +64,11 @@ if(isset($_POST['g-recaptcha-response'])) {
 
   if($api_result->success && isset($_POST['jumpid'])) {
     $url = parse_url(base64_decode($_POST['jumpid'])); // we just hide the next url from the search engines, not from users
-    $url['query'] .= '&rcts=' . base64_encode($api_result->challenge_ts); // The next hop may or may not validate this timestamp
+    $url['query'] .= '&rcts=' . urlencode(base64_encode($api_result->challenge_ts)); // The next hop may or may not validate this timestamp
     header('Location: ' . rebuild_url($url));
   } else {
+    //print ($api_result->success ? "Captcha OK" : "Captcha not OK");
+    print_r($api_result);
     print "Captcha success (ezt nem kéne látnod, irj nekünk az info@dragonhall.hu -ra, és jelöld meg, melyik filmet próbáltad megnézni/letölteni. Köszi!)";
   }
   exit;
